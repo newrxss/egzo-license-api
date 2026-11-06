@@ -12,14 +12,19 @@ import psycopg
 from fastapi import FastAPI, Header, HTTPException
 from pydantic import BaseModel, Field
 
-
+DATABASE_URL = os.environ.get("DATABASE_URL", "")
 ADMIN_API_KEY = os.environ.get("ADMIN_API_KEY", "")
 LICENSE_PEPPER = os.environ.get("LICENSE_PEPPER", "")
 
 
 def require_config() -> None:
-    if not DATABASE_URL or not ADMIN_API_KEY or not LICENSE_PEPPER:
-        raise RuntimeError("DATABASE_URL, ADMIN_API_KEY and LICENSE_PEPPER must be configured")
+    missing = [name for name, value in {
+        "DATABASE_URL": DATABASE_URL,
+        "ADMIN_API_KEY": ADMIN_API_KEY,
+        "LICENSE_PEPPER": LICENSE_PEPPER,
+    }.items() if not value]
+    if missing:
+        raise RuntimeError("Missing Railway variables: " + ", ".join(missing))
 
 
 def key_hash(key: str) -> str:
