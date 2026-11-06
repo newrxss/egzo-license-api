@@ -12,7 +12,7 @@ import psycopg
 from fastapi import FastAPI, Header, HTTPException
 from pydantic import BaseModel, Field
 
-DATABASE_URL = os.environ.get("DATABASE_URL", "")
+
 ADMIN_API_KEY = os.environ.get("ADMIN_API_KEY", "")
 LICENSE_PEPPER = os.environ.get("LICENSE_PEPPER", "")
 
